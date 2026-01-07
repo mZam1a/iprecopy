@@ -1,5 +1,7 @@
 import argparse
 import socket
+from typing import Type
+import sys
 import requests
 import ipaddress
 
@@ -67,23 +69,28 @@ def get_requests(url, ip=None):
 
 #Desglose data function from response JSON
 def desglose_data(data):
-    ip = data["ip"]
-    hosts = data["network"]["hosts"]
-    location = data["location"]
-    system = data["network"]["autonomous_system"]
+    try:
+        ip = data["ip"]
+        hosts = data["network"]["hosts"]
+        location = data["location"]
+        system = data["network"]["autonomous_system"]
 
-    #Name -> "name - organization (country) - ASN: asn"
-    name = f"{system['name']} - {system['organization']} ({system['country']}) - ASN: {system['asn']}"
+        #Name -> "name - organization (country) - ASN: asn"
+        name = f"{system['name']} - {system['organization']} ({system['country']}) - ASN: {system['asn']}"
 
-    #Example IP Range -> "xxx.xxx.xxx.1 - xxx.xxx.xxx.16"
-    range_ip = f"{hosts['start']} - {hosts['end']}"
-    city = location['city'] if location['city'] else "Unknown"
-    country = location['country']
-    timezone = location['timezone']
-    latitude = location['latitude']
-    longitude = location['longitude']
-    #Return all desglose data
-    return ip, range_ip, name, city, country, timezone, latitude, longitude
+        #Example IP Range -> "xxx.xxx.xxx.1 - xxx.xxx.xxx.16"
+        range_ip = f"{hosts['start']} - {hosts['end']}"
+        city = location['city'] if location['city'] else "Unknown"
+        country = location['country']
+        timezone = location['timezone']
+        latitude = location['latitude']
+        longitude = location['longitude']
+        #Return all desglose data
+        return ip, range_ip, name, city, country, timezone, latitude, longitude
+    except TypeError as e:
+        RED_POINT = pointers(RED)
+        print(f"{RED_POINT}{RED} Data Desglose Error:{RESET}{e}")
+        sys.exit(1)
 
 #Simple DNS resolution function
 def dns_resolution(IP):
@@ -101,7 +108,8 @@ def print_results(ip, range_ip, name, city, country, timezone, latitude, longitu
     print(f"{GREEN}\nGeolocation Data Retrieved:{RESET}")
     print(f"\n{ip} -> {name}\n")
     print(f"{simple_pointer()}IP Range: {range_ip}")
-    print(f"{simple_pointer()}Hostname: {hostname}")
+    if hostname:
+        print(f"{simple_pointer()}Hostname: {hostname}")
     print(f"{simple_pointer()}City: {city}")
     print(f"{simple_pointer()}Country: {country}")
     print(f"{simple_pointer()}Timezone: {timezone}")
