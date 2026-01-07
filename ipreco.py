@@ -59,6 +59,9 @@ def get_requests(url, ip=None):
     try:
         if ip:
             response = requests.get(f"{url}{ip}")
+            if response.status_code != 200:
+                print(f"{RED_POINT}{RED} Error: Code {response.status_code}.{RESET}")
+                return None
             return response.json()
         else:
             #If no IP provided, get own IP data -> GET https://ip.guide/
