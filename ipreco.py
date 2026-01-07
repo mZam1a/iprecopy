@@ -114,7 +114,7 @@ def print_results(ip, range_ip, name, city, country, timezone, latitude, longitu
     print(f"{GREEN}\nGeolocation Data Retrieved:{RESET}")
     print(f"\n{ip} -> {name}\n")
     print(f"{simple_pointer()}IP Range: {range_ip}")
-    if hostname:
+    if hostname is not None:
         print(f"{simple_pointer()}Hostname: {hostname}")
     print(f"{simple_pointer()}City: {city}")
     print(f"{simple_pointer()}Country: {country}")
