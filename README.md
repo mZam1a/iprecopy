@@ -15,7 +15,7 @@ This tool is for educational purposes. I am not responsible for any misuse of th
 **Installation:**
 Download the repository and run the script using Python.
 
-    git clone https://github.com/mZam1a/ipreco.git
+    git clone https://github.com/mZam1a/iprecopy.git
 
 **Sample Usage:**
 
